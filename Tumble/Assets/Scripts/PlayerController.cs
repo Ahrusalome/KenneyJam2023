@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        speed = GetComponent<Stats>().speed;
         rbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
@@ -23,7 +22,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Player sprite reduce to 0.3f ?
-        this.transform.rotation = Quaternion.Euler(new Vector3(0, isFlipped() ? 180 : 0, 0));
         rbody.velocity = new Vector2(movement.x * speed/1.5f, rbody.velocity.y);
         animator.SetBool("Running", movement.x != 0);
         frontSpecialAttack = (movement.x != 0);
