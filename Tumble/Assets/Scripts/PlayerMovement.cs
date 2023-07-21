@@ -11,10 +11,10 @@ public class PlayerMovement : MonoBehaviour
     private bool isWallSliding;
     private bool isFacingRight;
     private bool isWallJumping = false;
-
+    private bool onImpulse = false;
     private float wallJumpingDirection;
-    private float wallJumpingTime = 0.2f;
     private float wallJumpingDuration = 0.4f;
+    private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
     [Header("Player Setup")]
@@ -50,7 +50,14 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (IsGrounded()) {
-            rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
+            onImpulse = false;
+        }
+        if (!onImpulse) {
+            if (IsGrounded()) {
+                rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
+            } else {
+                rb.velocity = new Vector2(moveVec.x * speed/airControlSlowDown, rb.velocity.y);
+            }
         }
     }
 
@@ -63,9 +70,10 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (IsWalled())
         {
+            onImpulse = true;
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
-            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight), ForceMode2D.Impulse);
 
             // if (transform.localScale.x != wallJumpingDirection)
             // {
@@ -82,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
     private void StopWallJumping()
     {
         isWallJumping = false;
+        onImpulse = false;
     }
 
     private bool IsGrounded()
