@@ -10,11 +10,10 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isWallSliding;
     private bool isFacingRight;
-    private bool isWallJumping;
+    private bool isWallJumping = false;
 
     private float wallJumpingDirection;
     private float wallJumpingTime = 0.2f;
-    private float wallJumpingCounter;
     private float wallJumpingDuration = 0.4f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
@@ -50,30 +49,33 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
+        if (IsGrounded()) {
+            rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
+        }
     }
 
     public void OnMove(InputValue value) => moveVec = value.Get<Vector2>();
 
     public void OnJump()
     {
-        if(IsGrounded())
+        if(IsGrounded()) {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
-        if(wallJumpingCounter > 0f)
+        }
+        else if (IsWalled())
         {
             isWallJumping = true;
-            rb.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
-            wallJumpingCounter = 0f;
+            wallJumpingDirection = -transform.localScale.x;
+            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
 
-            if (transform.localScale.x != wallJumpingDirection)
-            {
-                isFacingRight = !isFacingRight;
-                Vector3 localScale = transform.localScale;
-                localScale.x *= -1f;
-                transform.localScale = localScale;
-            }
-
+            // if (transform.localScale.x != wallJumpingDirection)
+            // {
+            //     isFacingRight = !isFacingRight;
+            //     Vector3 localScale = transform.localScale;
+            //     localScale.x *= -1f;
+            //     transform.localScale = localScale;
+            // }
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
+
         }
     }
 
@@ -87,35 +89,20 @@ public class PlayerMovement : MonoBehaviour
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundlayer);
     }
 
-    private bool isWalled()
+    private bool IsWalled()
     {
         return Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, groundlayer);
     }
 
     private void WallSlide()
     {
-        if(isWalled() && !IsGrounded() && moveVec.x != 0)
+        if(IsWalled() && !IsGrounded() && moveVec.x != 0 && !isWallJumping)
         {
+            // Debug.Log("WallSlide bby");
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
         else
             isWallSliding = false;
-    }
-
-    private void WallJump()
-    {
-        if(isWallSliding)
-        {
-            isWallJumping = false;
-            wallJumpingDirection = -transform.localScale.x;
-            wallJumpingCounter = wallJumpingTime;
-
-            CancelInvoke(nameof(StopWallJumping));
-        }
-        else
-        {
-            wallJumpingCounter -= Time.deltaTime;
-        }
     }
 }

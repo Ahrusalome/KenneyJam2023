@@ -7,10 +7,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rbody;
     private Vector2 movement = Vector2.zero;
     private bool hasWallJumped = false;
-    [SerializeField]ContactFilter2D contactFilter;
+    private RaycastHit2D hit2D;
     [SerializeField] private bool isGrounded = false;
 
     [Header("Player properties")]
+    [SerializeField] private Transform slopeRayCastOrigin;
+    [SerializeField] private Transform playerFeet;
     [SerializeField] private float speed = 5;
     [SerializeField] private float jumpHeight = 5;
     [SerializeField] private float wallJumpModifier = 1.5f;
@@ -37,36 +39,28 @@ public class PlayerController : MonoBehaviour
         if (isGrounded) {
             rbody.velocity = new Vector2(movement.x * speed/1.5f, rbody.velocity.y);
         }
-
-        List<RaycastHit2D> hit = new List<RaycastHit2D>();
-
-        Physics2D.BoxCast(transform.position, Vector2.one, 0f, Vector2.down, contactFilter.NoFilter(), hit);
-        foreach (RaycastHit2D item in hit)
-        {
-            
-        }
+        GroundCheck();
     }
 
-    public void OnJump()
-    {
-        if (isGrounded)
-        {
-            if(hasWallJumped){
-                rbody.AddForce(new Vector2(-movement.x*wallJumpModifier*speed, jumpHeight/2), ForceMode2D.Impulse);
-            } else {
-                rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
-            }
-            isGrounded = false;
-        }
-    }
+    // public void OnJump()
+    // {
+    //     if (isGrounded)
+    //     {
+    //         if(hasWallJumped){
+    //             rbody.AddForce(new Vector2(-movement.x*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
+    //         } else {
+    //             rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
+    //         }
+    //         isGrounded = false;
+    //     }
+    // }
 
     public void OnMove(InputValue val)
     {
         movement = val.Get<Vector2>();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
-    {
+    void OnCollisionStay2D(Collision2D collision) {
         foreach (ContactPoint2D contact in collision.contacts)
         {
             if (contact.normal.y > 0.2f)
@@ -76,10 +70,19 @@ public class PlayerController : MonoBehaviour
             }
             else {
                 if (!hasWallJumped) {
-                    isGrounded = true;
-                    hasWallJumped = true;
+                isGrounded = true;
+                hasWallJumped = true;
                 }
             }
+        }
+    }
+
+    void GroundCheck() {
+        hit2D = Physics2D.Raycast(slopeRayCastOrigin.position, Vector2.down, 300f, LayerMask.GetMask("Ground"));
+        if (hit2D) {
+            Vector2 temp = playerFeet.position;
+            temp.y = hit2D.point.y;
+            playerFeet.position = temp;
         }
     }
 }
