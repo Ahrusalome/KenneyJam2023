@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,13 +7,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rbody;
     private Vector2 movement = Vector2.zero;
     private bool hasWallJumped = false;
+    [SerializeField]ContactFilter2D contactFilter;
     [SerializeField] private bool isGrounded = false;
-
-    
 
     [Header("Player properties")]
     [SerializeField] private float speed = 5;
     [SerializeField] private float jumpHeight = 5;
+    [SerializeField] private float wallJumpModifier = 1.5f;
 
     public float Speed
     {
@@ -32,8 +33,17 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-         if (isGrounded) {
+
+        if (isGrounded) {
             rbody.velocity = new Vector2(movement.x * speed/1.5f, rbody.velocity.y);
+        }
+
+        List<RaycastHit2D> hit = new List<RaycastHit2D>();
+
+        Physics2D.BoxCast(transform.position, Vector2.one, 0f, Vector2.down, contactFilter.NoFilter(), hit);
+        foreach (RaycastHit2D item in hit)
+        {
+            
         }
     }
 
@@ -42,7 +52,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
         {
             if(hasWallJumped){
-                rbody.AddForce(new Vector2(-movement.x*2*speed, jumpHeight/2), ForceMode2D.Impulse);
+                rbody.AddForce(new Vector2(-movement.x*wallJumpModifier*speed, jumpHeight/2), ForceMode2D.Impulse);
             } else {
                 rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             }
