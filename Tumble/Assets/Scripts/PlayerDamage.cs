@@ -6,12 +6,12 @@ public class PlayerDamage : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log("test");
         if (collision != null)
         {
             if(collision.CompareTag("Danger"))
             {
-                Debug.Log(GameManager.RespawnPoint);
-                //GameManager.Respawn(gameObject);
+                GameManager.Respawn(gameObject);
             }
         }
     }

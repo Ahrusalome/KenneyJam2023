@@ -29,10 +29,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 7;
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float wallSlidingSpeed = 2f;
+    [SerializeField] private float wallJumpSpeed = 1.5f;
+    [SerializeField] private float wallJumpReduction = 1.5f;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        //Debug.Log(GameObject.FindGameObjectWithTag("RespawnPoint"));
     }
 
     private void Update()
@@ -65,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
         {
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
-            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(wallJumpingDirection * wallJumpSpeed * speed, jumpHeight / wallJumpReduction), ForceMode2D.Impulse);
 
             // if (transform.localScale.x != wallJumpingDirection)
             // {
