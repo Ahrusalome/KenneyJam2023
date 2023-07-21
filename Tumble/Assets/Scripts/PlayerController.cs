@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,13 +10,12 @@ public class PlayerController : MonoBehaviour
     private RaycastHit2D hit2D;
     [SerializeField] private bool isGrounded = false;
 
-    
-
     [Header("Player properties")]
     [SerializeField] private Transform slopeRayCastOrigin;
     [SerializeField] private Transform playerFeet;
     [SerializeField] private float speed = 5;
     [SerializeField] private float jumpHeight = 5;
+    [SerializeField] private float wallJumpModifier = 1.5f;
 
     public float Speed
     {
@@ -35,24 +35,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-         if (isGrounded) {
+
+        if (isGrounded) {
             rbody.velocity = new Vector2(movement.x * speed/1.5f, rbody.velocity.y);
         }
         GroundCheck();
     }
 
-    public void OnJump()
-    {
-        if (isGrounded)
-        {
-            if(hasWallJumped){
-                rbody.AddForce(new Vector2(-movement.x*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
-            } else {
-                rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
-            }
-            isGrounded = false;
-        }
-    }
+    // public void OnJump()
+    // {
+    //     if (isGrounded)
+    //     {
+    //         if(hasWallJumped){
+    //             rbody.AddForce(new Vector2(-movement.x*1.5f*speed, jumpHeight/1.5f), ForceMode2D.Impulse);
+    //         } else {
+    //             rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
+    //         }
+    //         isGrounded = false;
+    //     }
+    // }
 
     public void OnMove(InputValue val)
     {
