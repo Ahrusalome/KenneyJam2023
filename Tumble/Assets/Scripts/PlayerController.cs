@@ -5,47 +5,45 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody2D rbody;
     private Vector2 movement = Vector2.zero;
-    public int speed;
-    private Animator animator;
-    public bool grounded = false;
-    public bool frontSpecialAttack = false;
-    public bool isGuarding;
+    [SerializeField] private bool isGrounded = false;
 
-    public Vector3 ennemyPosition;
+    
 
-    void Start()
+    [Header("Player properties")]
+    [SerializeField] private float speed = 5;
+    [SerializeField] private float jumpHeight = 5;
+
+    public float Speed
     {
-        speed = GetComponent<Stats>().speed;
+        get { return speed; }   
+        set { speed = value; }  
+    }
+    public float JumpHeight
+    {
+        get { return jumpHeight; }
+        set { jumpHeight = value; }
+    }
+
+    private void Start()
+    {
         rbody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Update()
     {
-        // Player sprite reduce to 0.3f ?
-        this.transform.rotation = Quaternion.Euler(new Vector3(0, isFlipped() ? 180 : 0, 0));
         rbody.velocity = new Vector2(movement.x * speed/1.5f, rbody.velocity.y);
-        animator.SetBool("Running", movement.x != 0);
-        frontSpecialAttack = (movement.x != 0);
-        if ((movement.x < 0 && this.GetComponent<RectTransform>().localScale.x > 0) ||
-        (movement.x > 0 && this.GetComponent<RectTransform>().localScale.x < 0)){
-            isGuarding = true;
-        } else {
-            isGuarding = false;
-        }
     }
 
-    void OnJump()
+    public void OnJump()
     {
-        if (grounded)
+        if (isGrounded)
         {
-            rbody.AddForce(new Vector2(0, 5), ForceMode2D.Impulse);
-            grounded = false;
-            animator.SetBool("InTheAir", true);
+            rbody.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
+            isGrounded = false;
         }
     }
 
-    void OnMove(InputValue val)
+    public void OnMove(InputValue val)
     {
         movement = val.Get<Vector2>();
     }
@@ -56,8 +54,7 @@ public class PlayerController : MonoBehaviour
         {
             if (contact.normal.y > 0.8f)
             {
-                grounded = true;
-                animator.SetBool("InTheAir", false);
+                isGrounded = true;
             }
         }
     }
