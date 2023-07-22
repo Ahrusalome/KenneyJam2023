@@ -20,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
-    [SerializeField] private ParticleSystem particleSystem;
+    [SerializeField] private ParticleSystem particles;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
@@ -48,11 +48,6 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-
-        if(moveVec.x != 0)
-            particleSystem.Play();
-        else
-            particleSystem.Stop();
 
         WallSlide();
     }
@@ -117,7 +112,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if(IsWalled() && !IsGrounded() && moveVec.x != 0 && !isWallJumping)
         {
-            // Debug.Log("WallSlide bby");
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
