@@ -56,6 +56,8 @@ public class PlayerMovement : MonoBehaviour
         set { airControlSlowDown = value; }
     }
 
+    
+
     private bool coyote => !IsGrounded() && timeLeftGround + coyoteTimeThreshold > Time.time;
     private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
@@ -92,6 +94,13 @@ public class PlayerMovement : MonoBehaviour
     }
 
     [SerializeField] private float runHoldDecrease;
+
+    public float RunHoldDecrease
+    {
+        get { return runHoldDecrease; }
+        set { runHoldDecrease = value; }
+    }
+
     private float runHold;
 
     private void FixedUpdate()
