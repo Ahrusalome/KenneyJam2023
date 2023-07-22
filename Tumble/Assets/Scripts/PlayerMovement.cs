@@ -101,22 +101,19 @@ public class PlayerMovement : MonoBehaviour
             onImpulse = false;
             animator.SetBool("IsJumping", false);
             currentVerticalSpeed = 0;
-        }
-        if (!onImpulse) {
-            if (IsGrounded()) {
-                rb.velocity = (new Vector2(moveVec.x * speed, rb.velocity.y));
-                if (moveVec.x != 0) {
-                    currentHorizontalSpeed = moveVec.x;
-                    animator.SetBool("IsRunning", true);
-                } else {
-                    runHold = Mathf.MoveTowards(currentHorizontalSpeed, 0, runHoldDecrease * Time.deltaTime);
-                    currentHorizontalSpeed = runHold;
-                    rb.velocity = (new Vector2(runHold, rb.velocity.y));
-                    animator.SetBool("IsRunning", false);
-                }
+            rb.velocity = (new Vector2(moveVec.x * speed, rb.velocity.y));
+            if (moveVec.x != 0) {
+                currentHorizontalSpeed = moveVec.x;
+                animator.SetBool("IsRunning", true);
             } else {
-                rb.velocity = new Vector2(moveVec.x * speed/airControlSlowDown, rb.velocity.y);
+                runHold = Mathf.MoveTowards(currentHorizontalSpeed, 0, runHoldDecrease * Time.deltaTime);
+                currentHorizontalSpeed = runHold;
+                rb.velocity = (new Vector2(runHold, rb.velocity.y));
+                animator.SetBool("IsRunning", false);
             }
+        }
+        if (!onImpulse && !IsGrounded()) {
+            rb.velocity = new Vector2(moveVec.x * speed/airControlSlowDown, rb.velocity.y);
         }
     }
 
@@ -164,7 +161,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsWalled()
     {
-        return Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, groundlayer);
+        return Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, groundlayer) && !IsGrounded();
     }
 
     private void WallSlide()
@@ -223,6 +220,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else {
             apexPoint = 0;
+        } if (onImpulse) {
+            fallSpeed-=5f;
         }
     }
 
