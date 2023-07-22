@@ -17,4 +17,9 @@ public static class GameManager
     {
             player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
     }
+
+    public static void ResetRespawnPoint()
+    {
+        customRespawnPoint = null;
+    }
 }
