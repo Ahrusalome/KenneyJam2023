@@ -13,9 +13,10 @@ public static class GameManager
     private static GameObject player = GameObject.FindGameObjectWithTag("Player");
     public static GameObject Player { get { return player; } }
 
-    public static void Respawn(GameObject player)
+    public static void Respawn()
     {
-            player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
+        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
     }
 
     public static void ResetRespawnPoint()

@@ -95,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             if (IsGrounded()) {
                 rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
             } else {
-                rb.velocity = new Vector2(moveVec.x * speed/airControlSlowDown, rb.velocity.y);
+                rb.velocity = new Vector2(moveVec.x * speed / airControlSlowDown, rb.velocity.y);
             }
         }
     }
