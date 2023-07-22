@@ -7,6 +7,7 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private float speed = 7;
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float airControlSlowDown = 1f;
+    [SerializeField] private float runHoldDecrease = 5f;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -15,7 +16,7 @@ public class GameLoop : MonoBehaviour
 
     public void Loop()
     {
-        ParameterChanger.ChangePlayerParameter(speed, jumpHeight, airControlSlowDown);
+        ParameterChanger.ChangePlayerParameter(speed, jumpHeight, airControlSlowDown, runHoldDecrease);
         GameManager.CustomRespawnPoint = null;
         GameManager.Respawn();
     }
