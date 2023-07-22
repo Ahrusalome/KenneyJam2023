@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         }
         WallSlide();
         if (!IsGrounded()) {
-            DefyEdges();
+            // DefyEdges();
         } else {
             hasDefiedEdge = false;
         }
@@ -87,8 +87,8 @@ public class PlayerMovement : MonoBehaviour
         if(bufferedJump) {
             OnJump();
         }
-        CalculateJumpApex();
-        CalculateGravity();
+        // CalculateJumpApex();
+        // CalculateGravity();
     }
 
     [SerializeField] private float runHoldDecrease;
@@ -175,33 +175,33 @@ public class PlayerMovement : MonoBehaviour
         }
         animator.SetBool("IsWallSliding", isWallSliding);
     }
-
-    private void DefyEdges() {
-        var pos = transform.position;
-        var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
-        var newPos = new Vector3(0,0);
-        if (hit && !hasDefiedEdge) {
-            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 0.7f, groundlayer);
-            var emptyTopRight = Physics2D.Raycast(new Vector2(pos.x-0.4f, pos.y), EdgesDetector, 0.7f, groundlayer);
-            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
-            var emptyBotRight = Physics2D.Raycast(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector, 0.7f, groundlayer);
-            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
-            var emptyTopLeft = Physics2D.Raycast(new Vector2(pos.x+0.4f, pos.y), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
-            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
-            var emptyBotLeft = Physics2D.Raycast(new Vector2(pos.x-0.3f, pos.y-0.4f), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
-            if(((edgeTopRight.collider != null && !IsWalled()&& emptyTopLeft.collider == null)||(edgeBotLeft.collider != null && IsWalled()&&emptyBotLeft.collider ==null))) 
-            {
-                hasDefiedEdge = true;
-                newPos = new Vector3(-0.3f, 0.4f);
-                transform.position += newPos;
-            } else if (((edgeTopLeft.collider != null && !IsWalled() && emptyTopRight.collider == null)||(edgeBotRight.collider != null && IsWalled() && emptyBotRight.collider == null)))
-            {
-                hasDefiedEdge = true;
-                newPos = new Vector3(0.3f, 0.4f);
-                transform.position += newPos;
-            }
-        }
-    }
+    // private void DefyEdges() {
+    //     var pos = transform.position;
+    //     var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
+    //     var newPos = new Vector3(0,0);
+        
+    //     if (hit && !hasDefiedEdge) {
+    //         var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 0.7f, groundlayer);
+    //         var emptyTopRight = Physics2D.Raycast(new Vector2(pos.x-0.4f, pos.y), EdgesDetector, 0.7f, groundlayer);
+    //         var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
+    //         var emptyBotRight = Physics2D.Raycast(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector, 0.7f, groundlayer);
+    //         var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
+    //         var emptyTopLeft = Physics2D.Raycast(new Vector2(pos.x+0.4f, pos.y), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
+    //         var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
+    //         var emptyBotLeft = Physics2D.Raycast(new Vector2(pos.x-0.3f, pos.y-0.4f), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
+    //         if(((edgeTopRight.collider != null && !IsWalled()&& emptyTopLeft.collider == null)||(edgeBotLeft.collider != null && IsWalled()&&emptyBotLeft.collider ==null))) 
+    //         {
+    //             hasDefiedEdge = true;
+    //             newPos = new Vector3(-0.3f, 0.4f);
+    //             transform.position += newPos;
+    //         } else if (((edgeTopLeft.collider != null && !IsWalled() && emptyTopRight.collider == null)||(edgeBotRight.collider != null && IsWalled() && emptyBotRight.collider == null)))
+    //         {
+    //             hasDefiedEdge = true;
+    //             newPos = new Vector3(0.3f, 0.4f);
+    //             transform.position += newPos;
+    //         }
+    //     }
+    // }
 
     private float apexPoint;
     [SerializeField] private float jumpApexThreshold = 10f;
@@ -211,24 +211,22 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float fallClamp = -40f;
     private float fallSpeed;
 
-    private void CalculateJumpApex() {
-        if (!IsGrounded()) {
-            // Gets stronger the closer to the top of the jump
-            apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(rb.velocity.y));
-            fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, apexPoint);
-        }
-        else {
-            apexPoint = 0;
-        } if (onImpulse) {
-            fallSpeed-=5f;
-        }
-    }
+    // private void CalculateJumpApex() {
+    //     if (!IsGrounded()) {
+    //         // Gets stronger the closer to the top of the jump
+    //         apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(rb.velocity.y));
+    //         fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, apexPoint);
+    //     }
+    //     else {
+    //         apexPoint = 0;
+    //     }
+    // }
 
-    private void CalculateGravity() {
-        var fallSpeedAdd = endedJumpEarly && rb.velocity.y > 0 ? fallSpeed * jumpEndEarlyGravityModifier : fallSpeed;
-        currentVerticalSpeed -= fallSpeedAdd * Time.deltaTime;
-        if (currentVerticalSpeed < fallClamp) currentVerticalSpeed = fallClamp;
-        rb.AddForce(new Vector2(0, currentVerticalSpeed));
-    }
+    // private void CalculateGravity() {
+    //     var fallSpeedAdd = endedJumpEarly && rb.velocity.y > 0 ? fallSpeed * jumpEndEarlyGravityModifier : fallSpeed;
+    //     currentVerticalSpeed -= fallSpeedAdd * Time.deltaTime;
+    //     if (currentVerticalSpeed < fallClamp) currentVerticalSpeed = fallClamp;
+    //     rb.AddForce(new Vector2(0, currentVerticalSpeed));
+    // }
 }
 
