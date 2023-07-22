@@ -19,6 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private float lastJumpPressed;
     private float timeLeftGround;
     private bool ground;
+    private bool hasDefiedEdge;
 
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
@@ -56,6 +57,8 @@ public class PlayerMovement : MonoBehaviour
         WallSlide();
         if (!IsGrounded()) {
             DefyEdges();
+        } else {
+            hasDefiedEdge = false;
         }
         if (IsGrounded() != ground) {
             timeLeftGround = Time.time;
@@ -139,16 +142,26 @@ public class PlayerMovement : MonoBehaviour
         var pos = transform.position;
         var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
         var newPos = new Vector3(0,0);
-        if (hit) {
-            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 1, groundlayer);
-            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
-            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 1, groundlayer);
-            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
-            if((edgeTopRight.collider != null||(edgeBotLeft.collider != null && IsWalled())) && edgeTopLeft.collider == null) {
-                newPos = new Vector3(-EdgesDetector.x/2, 0.2f);
+        if (hit && !hasDefiedEdge) {
+            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 0.8f, groundlayer);
+            var emptyTopRight = Physics2D.Raycast(new Vector2(pos.x-0.4f, pos.y), EdgesDetector, 0.8f, groundlayer);
+            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 0.8f, groundlayer);
+            var emptyBotRight = Physics2D.Raycast(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector, 0.8f, groundlayer);
+            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
+            var emptyTopLeft = Physics2D.Raycast(new Vector2(pos.x+0.4f, pos.y), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
+            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 0.8f, groundlayer);
+            var emptyBotLeft = Physics2D.Raycast(new Vector2(pos.x-0.3f, pos.y-0.4f), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
+            if(((edgeTopRight.collider != null && !IsWalled()&& emptyTopLeft.collider == null)||(edgeBotLeft.collider != null && IsWalled()&&emptyBotLeft.collider ==null))) 
+            {
+                hasDefiedEdge = true;
+                newPos = new Vector3(-EdgesDetector.x/2, 0.5f);
                 transform.position += newPos;
-            } else if ((edgeTopLeft.collider != null||(edgeBotRight.collider != null && IsWalled())) && edgeTopRight.collider == null) {
-                newPos = new Vector3(EdgesDetector.x/2, 0.2f);
+            } else if (((edgeTopLeft.collider != null && !IsWalled() && emptyTopRight.collider == null)||(edgeBotRight.collider != null && IsWalled() && emptyBotRight.collider == null)))
+            {
+                hasDefiedEdge = true;
+                Debug.DrawRay(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), Color.red,10f);
+                Debug.DrawRay(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector,Color.green, 10f);
+                newPos = new Vector3(EdgesDetector.x/2, 0.5f);
                 transform.position += newPos;
             }
         }

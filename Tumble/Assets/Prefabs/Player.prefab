@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3044393220192753980
+--- !u!1 &1221445218129616821
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,25 +8,56 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7974970995534809400}
+  - component: {fileID: 8910164648724784367}
   m_Layer: 0
-  m_Name: Slope Raycast
+  m_Name: Ground Check
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7974970995534809400
+--- !u!4 &8910164648724784367
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3044393220192753980}
+  m_GameObject: {fileID: 1221445218129616821}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.044, y: 0.116, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -0.012, y: -1.256, z: 0}
+  m_LocalScale: {x: 1.0619, y: 1.0619, z: 1.0619}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2614496676601103612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2442480352436571060
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7388672197988654775}
+  m_Layer: 0
+  m_Name: Wall Check
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7388672197988654775
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2442480352436571060}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.347, y: -0.45, z: 0}
+  m_LocalScale: {x: 0.5306425, y: 2.5990157, z: 1.0354}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2614496676601103612}
@@ -136,7 +167,7 @@ GameObject:
   - component: {fileID: 923353858281851772}
   - component: {fileID: 6757035726985892280}
   - component: {fileID: 2989209181243140796}
-  - component: {fileID: 3212459364607097063}
+  - component: {fileID: 1638240521900659355}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -154,11 +185,12 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -4.81, y: 8.75, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.93387955, y: 0.77045065, z: 0.93387955}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 461914930368216945}
-  - {fileID: 7974970995534809400}
+  - {fileID: 7388672197988654775}
+  - {fileID: 8910164648724784367}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8558441931651988855
@@ -202,12 +234,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7b1a78bb15a0d294dbe3cce56906d607, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.92, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -272,18 +304,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.00433214}
+  m_Offset: {x: 0, y: -0.4}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 1.92, y: 2.56}
+    newSize: {x: 1.92, y: 2.56}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1.0086643}
+  m_Size: {x: 0.8, y: 1.8}
   m_EdgeRadius: 0
 --- !u!114 &2989209181243140796
 MonoBehaviour:
@@ -315,7 +347,7 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &3212459364607097063
+--- !u!114 &1638240521900659355
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,11 +356,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 7393445332781120304}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 197b5bfc8975e74459869a4c4e2e08a2, type: 3}
+  m_Script: {fileID: 11500000, guid: fd09fb7d26241ef41b510f391b3fe109, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isGrounded: 0
-  slopeRayCastOrigin: {fileID: 0}
-  playerFeet: {fileID: 0}
-  speed: 6
+  groundCheck: {fileID: 8910164648724784367}
+  wallCheck: {fileID: 7388672197988654775}
+  groundCheckRadius: 0.1
+  wallCheckRadius: 0.9
+  groundlayer:
+    serializedVersion: 2
+    m_Bits: 8
+  walllayer:
+    serializedVersion: 2
+    m_Bits: 8
+  jumpBuffer: 0.18
+  coyoteTimeThreshold: 0.2
+  speed: 7
   jumpHeight: 13
+  wallSlidingSpeed: 2
+  characterBounds: {x: 1, y: 1}
+  EdgesDetector: {x: 0.8, y: 1}
