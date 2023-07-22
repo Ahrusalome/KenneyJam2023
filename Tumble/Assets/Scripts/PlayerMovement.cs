@@ -76,7 +76,7 @@ public class PlayerMovement : MonoBehaviour
         }
         WallSlide();
         if (!IsGrounded()) {
-            DefyEdges();
+            //DefyEdges();
         } else {
             hasDefiedEdge = false;
         }
@@ -87,11 +87,14 @@ public class PlayerMovement : MonoBehaviour
         if(bufferedJump) {
             OnJump();
         }
-        CalculateJumpApex();
-        CalculateGravity();
+        //CalculateJumpApex();
+        //CalculateGravity();
     }
 
     [SerializeField] private float runHoldDecrease;
+
+    public float RunHoldDecrease { get { return runHoldDecrease; } set { runHoldDecrease = value; } }
+
     private float runHold;
 
     private void FixedUpdate()

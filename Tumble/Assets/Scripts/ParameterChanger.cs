@@ -10,12 +10,13 @@ public class ParameterChanger : MonoBehaviour
         GameManager.CustomRespawnPoint = respawnPoint;
     }
 
-    public static void ChangePlayerParameter(float _speed, float _jumpheight, float _airControlSlowDown)
+    public static void ChangePlayerParameter(float _speed, float _jumpheight, float _airControlSlowDown, float _runHoldDecrease)
     {
         PlayerMovement player = GameManager.Player.GetComponent<PlayerMovement>();
 
         player.Speed = _speed;
         player.JumpHeight = _jumpheight;
         player.AirControlSlowDown = _airControlSlowDown;
+        player.RunHoldDecrease = _runHoldDecrease;
     }
 }
