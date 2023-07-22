@@ -20,6 +20,9 @@ public class PlayerMovement : MonoBehaviour
     private float timeLeftGround;
     private bool ground;
     private bool hasDefiedEdge;
+    private Animator animator;
+    private bool endedJumpEarly;
+    private float currentHorizontalSpeed, currentVerticalSpeed;
 
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
@@ -42,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -67,16 +71,32 @@ public class PlayerMovement : MonoBehaviour
         if(bufferedJump) {
             OnJump();
         }
+        CalculateJumpApex();
+        CalculateGravity();
     }
+
+    [SerializeField] private float runHoldDecrease;
+    private float runHold;
 
     private void FixedUpdate()
     {
         if (IsGrounded()) {
             onImpulse = false;
+            animator.SetBool("IsJumping", false);
+            currentVerticalSpeed = 0;
         }
         if (!onImpulse) {
             if (IsGrounded()) {
-                rb.velocity = new Vector2(moveVec.x * speed, rb.velocity.y);
+                rb.velocity = (new Vector2(moveVec.x * speed, rb.velocity.y));
+                if (moveVec.x != 0) {
+                    currentHorizontalSpeed = moveVec.x;
+                    animator.SetBool("IsRunning", true);
+                } else {
+                    runHold = Mathf.MoveTowards(currentHorizontalSpeed, 0, runHoldDecrease * Time.deltaTime);
+                    currentHorizontalSpeed = runHold;
+                    rb.velocity = (new Vector2(runHold, rb.velocity.y));
+                    animator.SetBool("IsRunning", false);
+                }
             } else {
                 rb.velocity = new Vector2(moveVec.x * speed/airControlSlowDown, rb.velocity.y);
             }
@@ -87,9 +107,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump()
     {
-        
         if(IsGrounded() || bufferedJump || coyote) {
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+        animator.SetBool("IsJumping", true);
         }
         else if (IsWalled())
         {
@@ -97,17 +117,21 @@ public class PlayerMovement : MonoBehaviour
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
             rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight), ForceMode2D.Impulse);
-
-            // if (transform.localScale.x != wallJumpingDirection)
-            // {
-            //     isFacingRight = !isFacingRight;
-            //     Vector3 localScale = transform.localScale;
-            //     localScale.x *= -1f;
-            //     transform.localScale = localScale;
-            // }
+            if (transform.localScale.x != wallJumpingDirection)
+            {
+                isFacingRight = !isFacingRight;
+                Vector3 localScale = transform.localScale;
+                localScale.x *= -1f;
+                transform.localScale = localScale;
+            }
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
         }
         lastJumpPressed = Time.time;
+        // if (context.duration)
+        // } else if (context.canceled) {
+        //     Debug.Log("oui");
+        //     // endedJumpEarly = true
+        // }
     }
 
     private void StopWallJumping()
@@ -130,12 +154,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if(IsWalled() && !IsGrounded() && moveVec.x != 0 && !isWallJumping)
         {
-            // Debug.Log("WallSlide bby");
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
-        else
+        else {
             isWallSliding = false;
+        }
+        animator.SetBool("IsWallSliding", isWallSliding);
     }
 
     private void DefyEdges() {
@@ -164,4 +189,31 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+    private float apexPoint;
+    [SerializeField] private float jumpApexThreshold = 10f;
+    [SerializeField] private float minFallSpeed = 80f;
+    [SerializeField] private float maxFallSpeed = 120f;
+    [SerializeField] private float jumpEndEarlyGravityModifier = 3;
+    [SerializeField] private float fallClamp = -40f;
+    private float fallSpeed;
+
+    private void CalculateJumpApex() {
+        if (!IsGrounded()) {
+            // Gets stronger the closer to the top of the jump
+            apexPoint = Mathf.InverseLerp(jumpApexThreshold, 0, Mathf.Abs(rb.velocity.y));
+            fallSpeed = Mathf.Lerp(minFallSpeed, maxFallSpeed, apexPoint);
+        }
+        else {
+            apexPoint = 0;
+        }
+    }
+
+    private void CalculateGravity() {
+        var fallSpeedAdd = endedJumpEarly && rb.velocity.y > 0 ? fallSpeed * jumpEndEarlyGravityModifier : fallSpeed;
+        currentVerticalSpeed -= fallSpeedAdd * Time.deltaTime;
+        if (currentVerticalSpeed < fallClamp) currentVerticalSpeed = fallClamp;
+        rb.AddForce(new Vector2(0, currentVerticalSpeed));
+    }
 }
+

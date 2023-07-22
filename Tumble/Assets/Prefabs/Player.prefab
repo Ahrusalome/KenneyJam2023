@@ -168,6 +168,7 @@ GameObject:
   - component: {fileID: 6757035726985892280}
   - component: {fileID: 2989209181243140796}
   - component: {fileID: 1638240521900659355}
+  - component: {fileID: 547068848827823848}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -260,7 +261,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2
+  m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -376,3 +377,30 @@ MonoBehaviour:
   wallSlidingSpeed: 2
   characterBounds: {x: 1, y: 1}
   EdgesDetector: {x: 0.8, y: 1}
+  runHoldDecrease: 2.2
+  jumpApexThreshold: 13
+  minFallSpeed: 10
+  maxFallSpeed: 60
+  jumpEndEarlyGravityModifier: 3
+  fallClamp: -4
+--- !u!95 &547068848827823848
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7393445332781120304}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7ce241b7c290c3241aa544bdbfc2249c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
