@@ -159,8 +159,6 @@ public class PlayerMovement : MonoBehaviour
             } else if (((edgeTopLeft.collider != null && !IsWalled() && emptyTopRight.collider == null)||(edgeBotRight.collider != null && IsWalled() && emptyBotRight.collider == null)))
             {
                 hasDefiedEdge = true;
-                Debug.DrawRay(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), Color.red,10f);
-                Debug.DrawRay(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector,Color.green, 10f);
                 newPos = new Vector3(EdgesDetector.x/2, 0.5f);
                 transform.position += newPos;
             }
