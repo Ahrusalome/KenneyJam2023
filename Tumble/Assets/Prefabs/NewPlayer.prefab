@@ -4999,7 +4999,7 @@ GameObject:
   - component: {fileID: 6498112893973382464}
   m_Layer: 0
   m_Name: NewPlayer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5191,20 +5191,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundCheck: {fileID: 5030786839497570237}
   wallCheck: {fileID: 2297689160595656042}
-  particleSystem: {fileID: 7130367279324868880}
   groundCheckRadius: 0.2
   wallCheckRadius: 0.15
   groundlayer:
     serializedVersion: 2
     m_Bits: 8
-  walllayer:
-    serializedVersion: 2
-    m_Bits: 8
+  jumpBuffer: 0.1
   speed: 7
   jumpHeight: 10
   wallSlidingSpeed: 2
+  characterBounds: {x: 0, y: 0}
+  EdgesDetector: {x: 0, y: 0}
+  wallJumpSpeedReduction: 1.5
   wallJumpMultiplier: 1.1
-  wallSpeedRecution: 1.5
   airControlSlowDown: 1.1
 --- !u!114 &6498112893973382464
 MonoBehaviour:

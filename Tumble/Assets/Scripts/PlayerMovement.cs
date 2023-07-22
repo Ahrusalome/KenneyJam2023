@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private bool onImpulse = false;
     private float wallJumpingDirection;
     private float wallJumpingDuration = 0.4f;
-    private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
     private float lastJumpPressed;
 
@@ -24,7 +23,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
-    [SerializeField] private LayerMask walllayer;
     [SerializeField] private float jumpBuffer = 0.1f;
 
     [Header("Player properties")]
@@ -33,7 +31,26 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallSlidingSpeed = 2f;
     [SerializeField] private Vector2 characterBounds;
     [SerializeField] private Vector2 EdgesDetector;
+    [SerializeField] private float wallJumpSpeedReduction = 1.5f;
+    [SerializeField] private float wallJumpMultiplier = 1f;
+    [SerializeField] private float airControlSlowDown = 2f;
     // private bool coyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+    public float JumpHeight
+    {
+        get { return jumpHeight; }
+        set { jumpHeight = value; }
+    }
+    public float AirControlSlowDown
+    {
+        get { return airControlSlowDown; }
+        set { airControlSlowDown = value; }
+    }
     private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
     private void Start()
@@ -85,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
             onImpulse = true;
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
-            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(wallJumpingDirection * wallJumpSpeedReduction * speed, jumpHeight * wallJumpMultiplier), ForceMode2D.Impulse);
 
             // if (transform.localScale.x != wallJumpingDirection)
             // {
