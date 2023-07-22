@@ -5091,7 +5091,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -5192,7 +5192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundCheck: {fileID: 5030786839497570237}
   wallCheck: {fileID: 2297689160595656042}
-  groundCheckRadius: 0.2
+  groundCheckRadius: 0.5
   wallCheckRadius: 0.5
   groundlayer:
     serializedVersion: 2
@@ -5205,7 +5205,7 @@ MonoBehaviour:
   characterBounds: {x: 1, y: 1}
   EdgesDetector: {x: 0.8, y: 1}
   airControlSlowDown: 2
-  runHoldDecrease: 2.3
+  runHoldDecrease: 3
   jumpApexThreshold: 13
   minFallSpeed: 10
   maxFallSpeed: 60
