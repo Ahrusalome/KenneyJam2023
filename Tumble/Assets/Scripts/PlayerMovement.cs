@@ -29,6 +29,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 7;
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float wallSlidingSpeed = 2f;
+    [SerializeField] private Vector2 characterBounds;
+    [SerializeField] private Vector2 EdgesDetector;
 
     private void Start()
     {
@@ -45,6 +47,9 @@ public class PlayerMovement : MonoBehaviour
             transform.localScale = localScale;
         }
         WallSlide();
+        if (!IsGrounded()) {
+            DefyEdges();
+        }
     }
 
     private void FixedUpdate()
@@ -113,5 +118,24 @@ public class PlayerMovement : MonoBehaviour
         }
         else
             isWallSliding = false;
+    }
+
+    private void DefyEdges() {
+        var pos = transform.position;
+        var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
+        var newPos = new Vector3(0,0);
+        if (hit) {
+            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 1, groundlayer);
+            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
+            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 1, groundlayer);
+            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
+            if((edgeTopRight.collider != null||(edgeBotLeft.collider != null && IsWalled())) && edgeTopLeft.collider == null) {
+                newPos = new Vector3(-EdgesDetector.x/2, 0.2f);
+                transform.position += newPos;
+            } else if ((edgeTopLeft.collider != null||(edgeBotRight.collider != null && IsWalled())) && edgeTopRight.collider == null) {
+                newPos = new Vector3(EdgesDetector.x/2, 0.2f);
+                transform.position += newPos;
+            }
+        }
     }
 }
