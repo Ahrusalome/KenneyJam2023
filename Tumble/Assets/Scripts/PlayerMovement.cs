@@ -14,25 +14,27 @@ public class PlayerMovement : MonoBehaviour
     private bool onImpulse = false;
     private float wallJumpingDirection;
     private float wallJumpingDuration = 0.4f;
-    
+    private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+    private float lastJumpPressed;
 
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
-    [SerializeField] private ParticleSystem particles;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
     [SerializeField] private LayerMask walllayer;
+    [SerializeField] private float jumpBuffer = 0.1f;
 
     [Header("Player properties")]
     [SerializeField] private float speed = 7;
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float wallSlidingSpeed = 2f;
-    [SerializeField] private float wallJumpMultiplier = 1.1f;
-    [SerializeField] private float wallSpeedRecution = 1.5f;
-    [SerializeField] private float airControlSlowDown = 2f;
+    [SerializeField] private Vector2 characterBounds;
+    [SerializeField] private Vector2 EdgesDetector;
+    // private bool coyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
+    private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
     private void Start()
     {
@@ -48,8 +50,13 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
-
         WallSlide();
+        if (!IsGrounded()) {
+            DefyEdges();
+        }
+        if(bufferedJump) {
+            OnJump();
+        }
     }
 
     private void FixedUpdate()
@@ -70,7 +77,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump()
     {
-        if(IsGrounded()) {
+        if(IsGrounded() || bufferedJump) {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
         else if (IsWalled())
@@ -78,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
             onImpulse = true;
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
-            rb.AddForce(new Vector2(wallJumpingDirection * wallSpeedRecution * speed, jumpHeight * wallJumpMultiplier), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight), ForceMode2D.Impulse);
 
             // if (transform.localScale.x != wallJumpingDirection)
             // {
@@ -88,8 +95,8 @@ public class PlayerMovement : MonoBehaviour
             //     transform.localScale = localScale;
             // }
             Invoke(nameof(StopWallJumping), wallJumpingDuration);
-
         }
+        lastJumpPressed = Time.time;
     }
 
     private void StopWallJumping()
@@ -112,10 +119,30 @@ public class PlayerMovement : MonoBehaviour
     {
         if(IsWalled() && !IsGrounded() && moveVec.x != 0 && !isWallJumping)
         {
+            // Debug.Log("WallSlide bby");
             isWallSliding = true;
             rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
         else
             isWallSliding = false;
+    }
+
+    private void DefyEdges() {
+        var pos = transform.position;
+        var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
+        var newPos = new Vector3(0,0);
+        if (hit) {
+            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 1, groundlayer);
+            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
+            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 1, groundlayer);
+            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 1, groundlayer);
+            if((edgeTopRight.collider != null||(edgeBotLeft.collider != null && IsWalled())) && edgeTopLeft.collider == null) {
+                newPos = new Vector3(-EdgesDetector.x/2, 0.2f);
+                transform.position += newPos;
+            } else if ((edgeTopLeft.collider != null||(edgeBotRight.collider != null && IsWalled())) && edgeTopRight.collider == null) {
+                newPos = new Vector3(EdgesDetector.x/2, 0.2f);
+                transform.position += newPos;
+            }
+        }
     }
 }
