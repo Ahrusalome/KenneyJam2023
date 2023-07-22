@@ -17,6 +17,8 @@ public class PlayerMovement : MonoBehaviour
     private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
     private float lastJumpPressed;
+    private float timeLeftGround;
+    private bool ground;
 
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
@@ -25,7 +27,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
     [SerializeField] private LayerMask walllayer;
-    [SerializeField] private float jumpBuffer = 0.1f;
+    [SerializeField] private float jumpBuffer = 0.15f;
+    [SerializeField] private float coyoteTimeThreshold = 0.2f;
 
     [Header("Player properties")]
     [SerializeField] private float speed = 7;
@@ -33,7 +36,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallSlidingSpeed = 2f;
     [SerializeField] private Vector2 characterBounds;
     [SerializeField] private Vector2 EdgesDetector;
-    // private bool coyote => _coyoteUsable && !_colDown && _timeLeftGrounded + _coyoteTimeThreshold > Time.time;
+    private bool coyote => !IsGrounded() && timeLeftGround + coyoteTimeThreshold > Time.time;
     private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
     private void Start()
@@ -53,6 +56,10 @@ public class PlayerMovement : MonoBehaviour
         WallSlide();
         if (!IsGrounded()) {
             DefyEdges();
+        }
+        if (IsGrounded() != ground) {
+            timeLeftGround = Time.time;
+            ground = IsGrounded();
         }
         if(bufferedJump) {
             OnJump();
@@ -77,7 +84,8 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump()
     {
-        if(IsGrounded() || bufferedJump) {
+        
+        if(IsGrounded() || bufferedJump || coyote) {
             rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
         }
         else if (IsWalled())

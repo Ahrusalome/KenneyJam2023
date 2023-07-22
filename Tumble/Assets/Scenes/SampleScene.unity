@@ -2677,11 +2677,12 @@ MonoBehaviour:
   walllayer:
     serializedVersion: 2
     m_Bits: 8
+  jumpBuffer: 0.18
   speed: 7
   jumpHeight: 13
   wallSlidingSpeed: 2
   characterBounds: {x: 1, y: 1}
-  EdgesDetector: {x: 0.2, y: 1}
+  EdgesDetector: {x: 0.3, y: 1}
 --- !u!1001 &2119325748
 PrefabInstance:
   m_ObjectHideFlags: 0
