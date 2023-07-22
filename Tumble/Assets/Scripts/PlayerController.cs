@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform playerFeet;
     [SerializeField] private float speed = 5;
     [SerializeField] private float jumpHeight = 5;
-    [SerializeField] private float wallJumpModifier = 1.5f;
+    //[SerializeField] private float wallJumpModifier = 1.5f;
 
     public float Speed
     {

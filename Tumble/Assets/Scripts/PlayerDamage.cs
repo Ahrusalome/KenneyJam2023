@@ -10,8 +10,7 @@ public class PlayerDamage : MonoBehaviour
         {
             if(collision.CompareTag("Danger"))
             {
-                Debug.Log(GameManager.RespawnPoint);
-                //GameManager.Respawn(gameObject);
+                GameManager.Respawn(gameObject);
             }
         }
     }

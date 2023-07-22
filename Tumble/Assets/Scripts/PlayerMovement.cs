@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private bool onImpulse = false;
     private float wallJumpingDirection;
     private float wallJumpingDuration = 0.4f;
-    [SerializeField] private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
     private float lastJumpPressed;
     private float timeLeftGround;
@@ -30,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
-    [SerializeField] private LayerMask walllayer;
     [SerializeField] private float jumpBuffer = 0.15f;
     [SerializeField] private float coyoteTimeThreshold = 0.2f;
 
@@ -40,6 +38,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallSlidingSpeed = 2f;
     [SerializeField] private Vector2 characterBounds;
     [SerializeField] private Vector2 EdgesDetector;
+    [SerializeField] private float airControlSlowDown = 2f;
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+    public float JumpHeight
+    {
+        get { return jumpHeight; }
+        set { jumpHeight = value; }
+    }
+    public float AirControlSlowDown
+    {
+        get { return airControlSlowDown; }
+        set { airControlSlowDown = value; }
+    }
+
     private bool coyote => !IsGrounded() && timeLeftGround + coyoteTimeThreshold > Time.time;
     private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
@@ -165,23 +181,23 @@ public class PlayerMovement : MonoBehaviour
         var hit = Physics2D.OverlapBox(pos, characterBounds, 0, groundlayer);
         var newPos = new Vector3(0,0);
         if (hit && !hasDefiedEdge) {
-            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 0.8f, groundlayer);
-            var emptyTopRight = Physics2D.Raycast(new Vector2(pos.x-0.4f, pos.y), EdgesDetector, 0.8f, groundlayer);
-            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 0.8f, groundlayer);
-            var emptyBotRight = Physics2D.Raycast(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector, 0.8f, groundlayer);
-            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
-            var emptyTopLeft = Physics2D.Raycast(new Vector2(pos.x+0.4f, pos.y), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
-            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 0.8f, groundlayer);
-            var emptyBotLeft = Physics2D.Raycast(new Vector2(pos.x-0.3f, pos.y-0.4f), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.8f, groundlayer);
+            var edgeTopRight = Physics2D.Raycast(pos, EdgesDetector, 0.7f, groundlayer);
+            var emptyTopRight = Physics2D.Raycast(new Vector2(pos.x-0.4f, pos.y), EdgesDetector, 0.7f, groundlayer);
+            var edgeBotRight = Physics2D.Raycast(pos, new Vector2(EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
+            var emptyBotRight = Physics2D.Raycast(new Vector2(pos.x+0.3f, pos.y-0.4f), EdgesDetector, 0.7f, groundlayer);
+            var edgeTopLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
+            var emptyTopLeft = Physics2D.Raycast(new Vector2(pos.x+0.4f, pos.y), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
+            var edgeBotLeft = Physics2D.Raycast(pos, new Vector2(-EdgesDetector.y, -EdgesDetector.x), 0.7f, groundlayer);
+            var emptyBotLeft = Physics2D.Raycast(new Vector2(pos.x-0.3f, pos.y-0.4f), new Vector2(-EdgesDetector.x, EdgesDetector.y), 0.7f, groundlayer);
             if(((edgeTopRight.collider != null && !IsWalled()&& emptyTopLeft.collider == null)||(edgeBotLeft.collider != null && IsWalled()&&emptyBotLeft.collider ==null))) 
             {
                 hasDefiedEdge = true;
-                newPos = new Vector3(-EdgesDetector.x/2, 0.5f);
+                newPos = new Vector3(-0.3f, 0.4f);
                 transform.position += newPos;
             } else if (((edgeTopLeft.collider != null && !IsWalled() && emptyTopRight.collider == null)||(edgeBotRight.collider != null && IsWalled() && emptyBotRight.collider == null)))
             {
                 hasDefiedEdge = true;
-                newPos = new Vector3(EdgesDetector.x/2, 0.5f);
+                newPos = new Vector3(0.3f, 0.4f);
                 transform.position += newPos;
             }
         }
