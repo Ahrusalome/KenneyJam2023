@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
     private bool onImpulse = false;
     private float wallJumpingDirection;
     private float wallJumpingDuration = 0.4f;
-    private float airControlSlowDown = 2f;
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
     private float lastJumpPressed;
     private float timeLeftGround;
@@ -36,6 +35,24 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float wallSlidingSpeed = 2f;
     [SerializeField] private Vector2 characterBounds;
     [SerializeField] private Vector2 EdgesDetector;
+    [SerializeField] private float airControlSlowDown = 2f;
+
+    public float Speed
+    {
+        get { return speed; }
+        set { speed = value; }
+    }
+    public float JumpHeight
+    {
+        get { return jumpHeight; }
+        set { jumpHeight = value; }
+    }
+    public float AirControlSlowDown
+    {
+        get { return airControlSlowDown; }
+        set { airControlSlowDown = value; }
+    }
+
     private bool coyote => !IsGrounded() && timeLeftGround + coyoteTimeThreshold > Time.time;
     private bool bufferedJump => IsGrounded() && lastJumpPressed + jumpBuffer > Time.time;
 
