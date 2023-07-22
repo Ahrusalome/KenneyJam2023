@@ -14,12 +14,13 @@ public class PlayerMovement : MonoBehaviour
     private bool onImpulse = false;
     private float wallJumpingDirection;
     private float wallJumpingDuration = 0.4f;
-    private float airControlSlowDown = 2f;
+    
     private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
     [Header("Player Setup")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private Transform wallCheck;
+    [SerializeField] private ParticleSystem particleSystem;
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private float wallCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundlayer;
@@ -29,6 +30,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speed = 7;
     [SerializeField] private float jumpHeight = 10;
     [SerializeField] private float wallSlidingSpeed = 2f;
+    [SerializeField] private float wallJumpMultiplier = 1.1f;
+    [SerializeField] private float wallSpeedRecution = 1.5f;
+    [SerializeField] private float airControlSlowDown = 2f;
 
     private void Start()
     {
@@ -44,6 +48,12 @@ public class PlayerMovement : MonoBehaviour
             localScale.x *= -1f;
             transform.localScale = localScale;
         }
+
+        if(moveVec.x != 0)
+            particleSystem.Play();
+        else
+            particleSystem.Stop();
+
         WallSlide();
     }
 
@@ -73,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
             onImpulse = true;
             isWallJumping = true;
             wallJumpingDirection = -transform.localScale.x;
-            rb.AddForce(new Vector2(wallJumpingDirection*1.5f*speed, jumpHeight), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(wallJumpingDirection * wallSpeedRecution * speed, jumpHeight * wallJumpMultiplier), ForceMode2D.Impulse);
 
             // if (transform.localScale.x != wallJumpingDirection)
             // {
