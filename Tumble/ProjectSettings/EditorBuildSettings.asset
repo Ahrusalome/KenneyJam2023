@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CannabisWorld.unity
     guid: 41ed1fc896203264f810b8176c0b1c8f
   - enabled: 1
+    path: Assets/Scenes/KetaminWorld.unity
+    guid: 9fb82517415adc64db86e472629942ec
+  - enabled: 1
     path: Assets/Scenes/CocaineWorld.unity
     guid: d4c3e489927811742b268f4943b3cfb7
   - enabled: 1
