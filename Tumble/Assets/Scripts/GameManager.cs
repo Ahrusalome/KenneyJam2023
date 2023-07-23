@@ -13,6 +13,9 @@ public static class GameManager
     private static GameObject player = GameObject.FindGameObjectWithTag("Player");
     public static GameObject Player { get { return player; } }
 
+    private static GameObject heroineEntrance = GameObject.FindGameObjectWithTag("HeroineEntrance");
+    public static GameObject HeroineEntrance { get { return heroineEntrance; } }
+
     public static void Respawn()
     {
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;

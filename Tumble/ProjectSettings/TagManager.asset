@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Danger
   - RespawnPoint
+  - HeroineEntrance
   layers:
   - Default
   - TransparentFX
