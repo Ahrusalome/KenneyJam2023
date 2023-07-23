@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class ParameterChanger : MonoBehaviour
 {
+    [SerializeField] private bool isFinal = false;
+    [SerializeField] private EvilPlayer evil;
     [SerializeField] private GameObject respawnPoint;
     private void OnTriggerEnter2D(Collider2D collision)
     {
         GameManager.CustomRespawnPoint = respawnPoint;
+        if(isFinal)
+        {
+            evil.isWalking = true;
+        }
     }
 
     public static void ChangePlayerParameter(float _speed, float _jumpheight, float _airControlSlowDown, float _runHoldDecrease)
