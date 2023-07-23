@@ -36,7 +36,18 @@ public static class GameManager
 
     public static  void Respawn()
     {
-        evilPlayer.GetComponent<EvilPlayer>().ResetPosition();
+        if(respawnPoint != null)
+            respawnPoint = GameObject.FindGameObjectWithTag("RespawnPoint");
+
+        if(evilPlayer != null)
+        {
+            evilPlayer.GetComponent<EvilPlayer>().ResetPosition();
+        }
+        else
+        {
+            evilPlayer = GameObject.FindGameObjectWithTag("EvilPlayer");
+        }
+            
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
     }
