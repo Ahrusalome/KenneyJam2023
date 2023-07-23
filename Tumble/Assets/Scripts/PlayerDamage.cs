@@ -12,6 +12,7 @@ public class PlayerDamage : MonoBehaviour
             {
                 GameManager.Respawn();
             }
+
         }
     }
 }
