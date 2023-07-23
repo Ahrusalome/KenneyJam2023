@@ -16,6 +16,9 @@ public class GameLoop : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // Loop();
+        GameManager.RespawnPoint = null;
+        GameManager.CustomRespawnPoint = null;
+        GameManager.Player = null;
         SoundManager.Instance.PlayMusic(clip);
         SceneManager.LoadScene(nextScene);
     }

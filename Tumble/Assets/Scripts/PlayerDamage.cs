@@ -10,6 +10,9 @@ public class PlayerDamage : MonoBehaviour
         {
             if(collision.CompareTag("Danger"))
             {
+                GameManager.RespawnPoint = null;
+                GameManager.CustomRespawnPoint = null;
+                GameManager.Player = null;  
                 GameManager.Respawn();
             }
 

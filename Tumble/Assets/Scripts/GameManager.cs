@@ -5,28 +5,15 @@ using UnityEngine.SceneManagement;
 
 public static class GameManager
 {
-    // public static static GameManager Instance;
-    // void Awake() {
-    //     if (Instance == null) {
-    //         Instance = this;
-    //         DontDestroyOnLoad(gameObject);
-    //     }
-    //     else {
-    //         Destroy(gameObject);
-    //     }
-    // }
 
     private static GameObject respawnPoint = GameObject.FindGameObjectWithTag("RespawnPoint");
-    static void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        respawnPoint = GameObject.FindGameObjectWithTag("RespawnPoint");
-        Debug.Log("oui");
-    }
+    public static  GameObject RespawnPoint { get { return respawnPoint; } set { respawnPoint = value; } }
 
     private static GameObject customRespawnPoint = null;
     public static  GameObject CustomRespawnPoint { get { return customRespawnPoint; } set { customRespawnPoint = value; } }
 
-    private static GameObject player = GameObject.FindGameObjectWithTag("Player");
-    public static  GameObject Player { get { return player; } }
+    public static GameObject player = GameObject.FindGameObjectWithTag("Player");
+    public static  GameObject Player { get { return player; } set { player = value; } }
 
     private static GameObject heroineEntrance = GameObject.FindGameObjectWithTag("HeroineEntrance");
     public static  GameObject HeroineEntrance { get { return heroineEntrance; } }
@@ -36,7 +23,7 @@ public static class GameManager
 
     public static  void Respawn()
     {
-        if(respawnPoint != null)
+        if(respawnPoint == null)
             respawnPoint = GameObject.FindGameObjectWithTag("RespawnPoint");
 
         if(evilPlayer != null)
@@ -47,8 +34,9 @@ public static class GameManager
         {
             evilPlayer = GameObject.FindGameObjectWithTag("EvilPlayer");
         }
+        if(player == null)
+            player = GameObject.FindGameObjectWithTag("Player");
             
-        player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
     }
 
