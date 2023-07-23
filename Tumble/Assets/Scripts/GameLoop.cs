@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameLoop : MonoBehaviour
 {
@@ -10,11 +11,13 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private float runHoldDecrease = 5f;
     [SerializeField] private bool isEntranceActive = true;
     [SerializeField] private AudioClip clip;
+    [SerializeField] private string nextScene;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Loop();
+        // Loop();
         SoundManager.Instance.PlayMusic(clip);
+        SceneManager.LoadScene(nextScene);
     }
 
     public void Loop()
