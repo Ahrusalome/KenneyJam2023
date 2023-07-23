@@ -25,6 +25,7 @@ public class GameLoop : MonoBehaviour
         ParameterChanger.ChangePlayerParameter(speed, jumpHeight, airControlSlowDown, runHoldDecrease);
         GameManager.HeroineEntrance.SetActive(isEntranceActive);
         GameManager.CustomRespawnPoint = null;
+
         GameManager.Respawn();
     }
 }
