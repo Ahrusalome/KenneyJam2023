@@ -16,10 +16,11 @@ public static class GameManager
     private static GameObject heroineEntrance = GameObject.FindGameObjectWithTag("HeroineEntrance");
     public static GameObject HeroineEntrance { get { return heroineEntrance; } }
 
-    //public static GameObject evilPlayer = GameObject.FindGameObjectWithTag("EvilPlayer");
+    public static GameObject evilPlayer = GameObject.FindGameObjectWithTag("EvilPlayer");
 
     public static void Respawn()
     {
+        evilPlayer.GetComponent<EvilPlayer>().ResetPosition();
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
 

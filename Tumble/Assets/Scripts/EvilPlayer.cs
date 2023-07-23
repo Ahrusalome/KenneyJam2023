@@ -10,11 +10,11 @@ public class EvilPlayer : MonoBehaviour
     {
         if(isWalking)
         {
-            transform.position += new Vector3(7f * Time.deltaTime, 0f);
+            transform.position += new Vector3(6f * Time.deltaTime, 0f);
         }
     }
 
-    public void ResetPostion()
+    public void ResetPosition()
     {
         isWalking = false;
         transform.position = originalPosition;
@@ -25,7 +25,6 @@ public class EvilPlayer : MonoBehaviour
         if(isWalking && collision.CompareTag("Player"))
         {
             GameManager.Respawn();
-            ResetPostion();
         }
     }
 }
