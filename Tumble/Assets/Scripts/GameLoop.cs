@@ -9,10 +9,12 @@ public class GameLoop : MonoBehaviour
     [SerializeField] private float airControlSlowDown = 1f;
     [SerializeField] private float runHoldDecrease = 5f;
     [SerializeField] private bool isEntranceActive = true;
+    [SerializeField] private AudioClip clip;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Loop();
+        SoundManager.Instance.PlayMusic(clip);
     }
 
     public void Loop()
