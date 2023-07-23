@@ -162,12 +162,12 @@ public class PlayerMovement : MonoBehaviour
         onImpulse = false;
     }
 
-    private bool IsGrounded()
+    public bool IsGrounded()
     {
         return Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundlayer);
     }
 
-    private bool IsWalled()
+    public bool IsWalled()
     {
         return Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, groundlayer) && !IsGrounded();
     }

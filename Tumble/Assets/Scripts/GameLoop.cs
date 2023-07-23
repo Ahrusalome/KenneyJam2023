@@ -19,8 +19,7 @@ public class GameLoop : MonoBehaviour
         SoundManager.Instance.PlayMusic(clip);
         SceneManager.LoadScene(nextScene);
     }
-
-    public void Loop()
+        public void Loop()
     {
         ParameterChanger.ChangePlayerParameter(speed, jumpHeight, airControlSlowDown, runHoldDecrease);
         GameManager.HeroineEntrance.SetActive(isEntranceActive);
