@@ -23,7 +23,6 @@ public static class GameManager
         evilPlayer.GetComponent<EvilPlayer>().ResetPosition();
         player.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         player.transform.position = customRespawnPoint != null ? customRespawnPoint.transform.position : respawnPoint.transform.position;
-
     }
 
     public static void ResetRespawnPoint()
